@@ -5,14 +5,11 @@ import 'package:flutter/widgets.dart';
 class BookWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-            children: <Widget>[
-              Text(utf8.decode([0xF0, 0x9F, 0x93, 0x96]) +
-                  ' How to do twice the work in half the time'),
-            ],
-          ));
+    return Row(
+      children: <Widget>[
+        Text(utf8.decode([0xF0, 0x9F, 0x93, 0x96]) +
+            ' How to do twice the work in half the time'),
+      ],
+    );
   }
-
 }

@@ -4,28 +4,24 @@ import 'package:flutter/widgets.dart';
 class TagsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: <Widget>[
-          Row(children: <Widget>[
-            buildChip(color: Colors.amberAccent, text: '#android'),
-          ]),
-          Row(children: <Widget>[
-            buildChip(color: Colors.grey, text: '#ios'),
-            buildChip(color: Colors.grey, text: '#firebase')
-          ]),
-          Row(children: <Widget>[
-            buildChip(color: Colors.brown, text: '#mongodb')
-          ]),
-          Row(children: <Widget>[
-            buildChip(color: Colors.blue, text: '#angularjs'),
-            buildChip(color: Colors.blue, text: '#nodejs'),
-            buildChip(color: Colors.blue, text: '#sketch')
-          ])
-        ],
-      ),
+    return Column(
+      children: <Widget>[
+        Row(children: <Widget>[
+          buildChip(color: Colors.amberAccent, text: '#android'),
+        ]),
+        Row(children: <Widget>[
+          buildChip(color: Colors.grey, text: '#ios'),
+          buildChip(color: Colors.grey, text: '#firebase')
+        ]),
+        Row(children: <Widget>[
+          buildChip(color: Colors.brown, text: '#mongodb')
+        ]),
+        Row(children: <Widget>[
+          buildChip(color: Colors.blue, text: '#angularjs'),
+          buildChip(color: Colors.blue, text: '#nodejs'),
+          buildChip(color: Colors.blue, text: '#sketch')
+        ])
+      ],
     );
   }
 

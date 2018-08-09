@@ -36,48 +36,43 @@ class ProfileState extends State<ProfilePage> {
               return ProfileInfo();
             }
             else if (index == 1) {
-              return Card(
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                  child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: TagsWidget(),
-                      width: MediaQuery.of(context).size.width));
+              return new WidgetCard(innerWidget: TagsWidget());
             } 
             else if (index == 2) {
-              return Card(
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                  child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: EmojisWidget(),
-                      width: MediaQuery.of(context).size.width));
+              return new WidgetCard(innerWidget: EmojisWidget());
             }
             else if (index == 3) {
-              return Card(
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                  child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: SmallWinWidget(),
-                      width: MediaQuery.of(context).size.width));
+              return new WidgetCard(innerWidget: SmallWinWidget());
             } 
             else {
-              return Card(
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                  child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: BookWidget(),
-                      width: MediaQuery.of(context).size.width));
+              return new WidgetCard(innerWidget: BookWidget());
             }
           },
         ),
       )
     ]));
+  }
+}
+
+class WidgetCard extends StatelessWidget {
+  final Widget innerWidget;
+  
+  const WidgetCard({
+    Key key, this.innerWidget
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+      child: Card(
+          elevation: 2.0,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12.0))),
+          child: Container(
+              padding: EdgeInsets.all(12.0),
+              child: innerWidget,
+              width: MediaQuery.of(context).size.width)),
+    );
   }
 }
