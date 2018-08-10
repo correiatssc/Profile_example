@@ -35,7 +35,7 @@ class ProfileInfoState extends State<ProfileInfo> {
                               BorderSide(color: Colors.cyan, width: 2.0),
                           shape: RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0)))),
+                                  BorderRadius.all(Radius.circular(12.0)))),
                     ),
                     new IconButton(
                       icon: Icon(Icons.person_add),
@@ -55,7 +55,7 @@ class ProfileInfoState extends State<ProfileInfo> {
           ]),
           Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
             child: Row(
               children: <Widget>[
                 buildProfileName(),
@@ -64,7 +64,7 @@ class ProfileInfoState extends State<ProfileInfo> {
           ),
           Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
             child: Row(
               children: <Widget>[
                 buildProfileOccupation(),
@@ -77,24 +77,24 @@ class ProfileInfoState extends State<ProfileInfo> {
     );
   }
 
-  Text buildProfileEmployee() {
-    return new Text(' @ dti digital',
+  Text buildProfileName() {
+    return new Text('Thalisson Correia',
         style: TextStyle(
-            color: Colors.deepPurple,
-            fontWeight: FontWeight.w600,
-            fontSize: 14.0));
+            color: Colors.cyan, fontWeight: FontWeight.w600, fontSize: 18.0));
   }
 
   Text buildProfileOccupation() {
     return new Text('Software Engineer ',
         style: TextStyle(
-            color: Colors.cyan, fontWeight: FontWeight.w600, fontSize: 14.0));
+            color: Colors.cyan, fontWeight: FontWeight.w500, fontSize: 14.0));
   }
 
-  Text buildProfileName() {
-    return new Text('Thalisson Correia',
+  Text buildProfileEmployee() {
+    return new Text(' @ dti digital',
         style: TextStyle(
-            color: Colors.cyan, fontWeight: FontWeight.bold, fontSize: 18.0));
+            color: Colors.deepPurple,
+            fontWeight: FontWeight.w500,
+            fontSize: 14.0));
   }
 
   void dummy() {}
@@ -113,8 +113,7 @@ class ProfilePicture extends StatelessWidget {
           new BoxDecoration(shape: BoxShape.circle, color: Color(0xFFFFFFFF)),
       child: new CircleAvatar(
         radius: 40.0,
-        backgroundImage: NetworkImage(
-          profilePictureUri),
+        backgroundImage: NetworkImage(profilePictureUri),
       ),
     );
   }
