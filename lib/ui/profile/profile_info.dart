@@ -1,136 +1,138 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:flutter_app/bloc/profile_bloc.dart';
+import 'package:flutter_app/models/profile_model.dart';
 
-class ProfileInfo extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return new ProfileInfoState();
-  }
-}
-
-class ProfileInfoState extends State<ProfileInfo> {
+class ProfileInfo extends StatelessWidget {
+  final Color cyan = Color.fromARGB(0xFF, 0x4E, 0xAC, 0xB7);
+  final Color deepPurple = Color.fromARGB(0xFF, 0x46, 0x41, 0x89);
+  final profileBloc = new ProfileBloc();
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Column(
-        children: <Widget>[
-          new Stack(children: <Widget>[
-            Container(
-                child: Column(
-              children: <Widget>[
-                new ProfileCoverPicture(
-                    imageUri:
-                        'https://images.pexels.com/photos/348523/pexels-photo-348523.jpeg?cs=srgb&dl=beach-blur-close-up-348523.jpg&fm=jpg'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 24.0,
-                      child: new OutlineButton(
+    profileBloc.getProfile('correia.tssc');
+    return StreamBuilder(
+        stream: profileBloc.stream,
+        initialData: new Profile(),
+        builder: (context, snapshot) {
+          Profile profile = snapshot.data;
+
+          if (profile == null) {
+            return new Container();
+          }
+
+          return new Stack(children: <Widget>[
+            new ProfileCoverPicture(profile.cover),
+            Padding(
+                padding: const EdgeInsets.only(
+                    top: 170.0, left: 8.0, right: 8.0, bottom: 4.0),
+                child: Column(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.person_add),
                           onPressed: dummy,
-                          child: Text("Message",
-                              style: TextStyle(color: Colors.cyan)),
-                          borderSide:
-                              BorderSide(color: Colors.cyan, width: 2.0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12.0)))),
+                          color: cyan,
+                        ),
+                        SizedBox(
+                          height: 32.0,
+                          child: new OutlineButton(
+                              onPressed: dummy,
+                              child: Text("Message",
+                                  style:
+                                      TextStyle(fontSize: 16.0, color: cyan)),
+                              borderSide: BorderSide(color: cyan, width: 2.0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12.0)))),
+                        ),
+                      ],
                     ),
-                    new IconButton(
-                      icon: Icon(Icons.person_add),
-                      onPressed: dummy,
-                      color: Colors.cyan,
-                    )
-                  ],
-                )
-              ],
-            )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 4.0, vertical: 2.0),
+                    child: Row(
+                      children: <Widget>[
+                        buildProfileName(profile.name),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 4.0, vertical: 4.0),
+                    child: Row(
+                      children: <Widget>[
+                        buildProfileJob(profile.job),
+                        buildProfileCompany(profile.company)
+                      ],
+                    ),
+                  )
+                ])),
             new Positioned(
-                top: 156.0,
-                left: 20.0,
-                child: new ProfilePicture(
-                    profilePictureUri:
-                        'https://images.pexels.com/photos/842567/pexels-photo-842567.jpeg?cs=srgb&dl=adult-beard-blur-842567.jpg&fm=jpg'))
-          ]),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
-            child: Row(
-              children: <Widget>[
-                buildProfileName(),
-              ],
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
-            child: Row(
-              children: <Widget>[
-                buildProfileOccupation(),
-                buildProfileEmployee()
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+                top: 124.0,
+                left: 30.0,
+                child: new ProfilePicture(profile.photo)),
+          ]);
+        });
   }
 
-  Text buildProfileName() {
-    return new Text('Thalisson Correia',
+  Text buildProfileName(String profileName) {
+    return new Text(profileName,
         style: TextStyle(
-            color: Colors.cyan, fontWeight: FontWeight.w600, fontSize: 18.0));
+            color: cyan, fontWeight: FontWeight.w600, fontSize: 24.0));
   }
 
-  Text buildProfileOccupation() {
-    return new Text('Software Engineer ',
+  Text buildProfileJob(String profileJob) {
+    return new Text(profileJob + ' ',
         style: TextStyle(
-            color: Colors.cyan, fontWeight: FontWeight.w500, fontSize: 14.0));
+            color: cyan, fontWeight: FontWeight.w600, fontSize: 16.0));
   }
 
-  Text buildProfileEmployee() {
-    return new Text(' @ dti digital',
+  Text buildProfileCompany(String profileCompany) {
+    return new Text(' @ ' + profileCompany,
         style: TextStyle(
-            color: Colors.deepPurple,
-            fontWeight: FontWeight.w500,
-            fontSize: 14.0));
+            color: deepPurple, fontWeight: FontWeight.w600, fontSize: 16.0));
   }
 
   void dummy() {}
 }
 
 class ProfilePicture extends StatelessWidget {
-  final String profilePictureUri;
+  final String profilePicture;
 
-  const ProfilePicture({this.profilePictureUri, Key key}) : super(key: key);
+  const ProfilePicture(this.profilePicture, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var bytes = base64Decode(this.profilePicture);
+
     return Container(
-      padding: EdgeInsets.all(4.0),
+      padding: EdgeInsets.all(6.0),
       decoration:
           new BoxDecoration(shape: BoxShape.circle, color: Color(0xFFFFFFFF)),
       child: new CircleAvatar(
         radius: 40.0,
-        backgroundImage: NetworkImage(profilePictureUri),
+        backgroundImage: Image.memory(bytes).image,
       ),
     );
   }
 }
 
 class ProfileCoverPicture extends StatelessWidget {
-  final String imageUri;
+  final String image;
 
-  ProfileCoverPicture({this.imageUri, Key key}) : super(key: key);
+  ProfileCoverPicture(this.image, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return new FadeInImage.memoryNetwork(
-        placeholder: kTransparentImage,
-        image: this.imageUri,
+    var bytes = base64Decode(this.image);
+    return new Image.memory(bytes,
         fit: BoxFit.cover,
-        height: 200.0,
+        height: 170.0,
         width: MediaQuery.of(context).size.width);
   }
 }
