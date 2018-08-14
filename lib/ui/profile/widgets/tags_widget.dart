@@ -37,7 +37,6 @@ class TagsWidget extends StatelessWidget {
 
   Widget buildChipsRow(
       BuildContext context, CollectionReference skills, Color color) {
-    final Color gold = Color(0xFFEDC130);
     return StreamBuilder(
         stream: skills.snapshots(),
         builder: (context, snapshot) {
