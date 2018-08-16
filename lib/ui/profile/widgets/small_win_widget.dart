@@ -1,20 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/bloc/profile_bloc.dart';
+import 'package:flutter_app/models/profile_model.dart';
 import 'package:flutter_app/ui/profile/widgets/photo_viewer.dart';
 import 'dart:convert';
 
-class SmallWinWidget extends StatelessWidget {
+class SmallWinWidget extends StatefulWidget {
+  final ProfileBloc bloc;
+  SmallWinWidget(this.bloc, {Key key}) : super(key: key);
+  
+  @override
+  State<StatefulWidget> createState() {
+    return SmallWinState();
+  }
+
+}
+
+class SmallWinState extends State<SmallWinWidget> {
   @override
   Widget build(BuildContext context) {
-    var profileSmallWinWidgetDocument = Firestore.instance
-        .collection('small_win_widget')
-        .document('correia.tssc');
-
-    return StreamBuilder(
-        stream: profileSmallWinWidgetDocument.get().asStream(),
+        return StreamBuilder(
+        stream: widget.bloc.profileSmallWin,
         builder: (context, snapshot) {
-          var smallWindWidgetInfo = snapshot.data;
+          SmallWin smallWindWidgetInfo = snapshot.data;
 
           return new Column(
             children: <Widget>[
@@ -22,14 +31,14 @@ class SmallWinWidget extends StatelessWidget {
                 children: <Widget>[
                   Text(utf8.decode([0xF0, 0x9F, 0x93, 0x8B]) +
                       ' ' +
-                      smallWindWidgetInfo.data['title']),
+                      smallWindWidgetInfo.title),
                 ],
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 height: 120.0,
                 child:
-                    new SmallWinWidgetPhotoList(profileSmallWinWidgetDocument),
+                    new SmallWinWidgetPhotoList(widget.bloc),
               )
             ],
           );
@@ -37,24 +46,31 @@ class SmallWinWidget extends StatelessWidget {
   }
 }
 
-class SmallWinWidgetPhotoList extends StatelessWidget {
-  const SmallWinWidgetPhotoList(
-    this.document, {
+class SmallWinWidgetPhotoList extends StatefulWidget {
+  final ProfileBloc bloc;  
+  SmallWinWidgetPhotoList(
+    this.bloc, {
     Key key,
   }) : super(key: key);
 
-  final DocumentReference document;
+  @override
+  State<StatefulWidget> createState() {
+    return SmallWinWidgetPhotoListState();
+  }
+}
 
+class SmallWinWidgetPhotoListState extends State<SmallWinWidgetPhotoList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: document.collection('photos').snapshots(),
+        stream: widget.bloc.profileSmallWinPhotos,
         builder: (context, snapshot) {
+          List<String> photos = snapshot.data;
           return new ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: snapshot.data.documents.length,
+            itemCount: photos.length,
             itemBuilder: (context, index) {
-              return new RoundedCornerImage(snapshot.data.documents[index].data['photo']);
+              return new RoundedCornerImage(photos[index]);
             }
           );
         });
@@ -77,7 +93,7 @@ class RoundedCornerImage extends StatelessWidget {
             context,
             new MaterialPageRoute(
                 builder: (context) =>
-                    new PhotoViewer(imageProvider: image.image)));
+                    new PhotoViewer(image: image)));
       },
       child: Hero(
         tag: image.image,

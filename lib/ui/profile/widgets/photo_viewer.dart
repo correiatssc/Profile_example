@@ -3,16 +3,16 @@ import 'package:flutter/widgets.dart';
 import 'package:photo_view/photo_view.dart';
 
 class PhotoViewer extends StatelessWidget {
-  final ImageProvider imageProvider;
+  final Image image;
 
-  const PhotoViewer({Key key, this.imageProvider}) : super(key: key);
+  const PhotoViewer({Key key, this.image}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return new Hero(
-      tag: imageProvider,
+      tag: image.image,
       child: PhotoView(
-        imageProvider: imageProvider,
+        imageProvider: image.image,
         backgroundColor: Colors.black,
         loadingChild: Container(),
         minScale: PhotoViewScaleBoundary.contained,

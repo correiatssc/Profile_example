@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/bloc/profile_bloc.dart';
 import 'package:flutter_app/ui/profile/profile_info.dart';
 import 'package:flutter_app/ui/profile/widgets/book_widget.dart';
 import 'package:flutter_app/ui/profile/widgets/emojis_widgets.dart';
 import 'package:flutter_app/ui/profile/widgets/small_win_widget.dart';
 import 'package:flutter_app/ui/profile/widgets/tags_widget.dart';
 
-class ProfilePage extends StatefulWidget {
-  final String title;
-  ProfilePage({Key key, this.title}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return new ProfileState();
-  }
-}
-
-class ProfileState extends State<ProfilePage> {
+class ProfilePage extends StatelessWidget {
+  final ProfileBloc profileBloc;
+  ProfilePage({Key key, this.profileBloc}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -37,13 +30,13 @@ class ProfileState extends State<ProfilePage> {
                 if (index > 4) {
                   return null;
                 } else if (index == 0) {
-                  return ProfileInfo();
+                  return ProfileInfo(profileBloc);
                 } else if (index == 1) {
                   return new WidgetCard(innerWidget: TagsWidget());
                 } else if (index == 2) {
                   return new WidgetCard(innerWidget: EmojisWidget());
                 } else if (index == 3) {
-                  return new WidgetCard(innerWidget: SmallWinWidget());
+                  return new WidgetCard(innerWidget: SmallWinWidget(profileBloc));
                 } else {
                   return new WidgetCard(innerWidget: BookWidget());
                 }

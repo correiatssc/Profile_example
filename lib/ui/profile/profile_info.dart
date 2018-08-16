@@ -3,17 +3,23 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/bloc/profile_bloc.dart';
 import 'package:flutter_app/models/profile_model.dart';
+import 'package:flutter_app/ui/colors.dart';
 
-class ProfileInfo extends StatelessWidget {
-  final Color cyan = Color.fromARGB(0xFF, 0x4E, 0xAC, 0xB7);
-  final Color deepPurple = Color.fromARGB(0xFF, 0x46, 0x41, 0x89);
-  final profileBloc = new ProfileBloc();
+class ProfileInfo extends StatefulWidget {
+  final ProfileBloc bloc;
+  ProfileInfo(this.bloc, {Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return ProfileInfoState();
+  }
+}
+
+class ProfileInfoState extends State<ProfileInfo> {
   @override
   Widget build(BuildContext context) {
-    profileBloc.getProfile('correia.tssc');
     return StreamBuilder(
-        stream: profileBloc.stream,
-        initialData: new Profile(),
+        stream: widget.bloc.currentProfile,
         builder: (context, snapshot) {
           Profile profile = snapshot.data;
 
@@ -35,7 +41,7 @@ class ProfileInfo extends StatelessWidget {
                         IconButton(
                           icon: Icon(Icons.person_add),
                           onPressed: dummy,
-                          color: cyan,
+                          color: MyColors.cyan,
                         ),
                         SizedBox(
                           height: 32.0,
@@ -43,8 +49,8 @@ class ProfileInfo extends StatelessWidget {
                               onPressed: dummy,
                               child: Text("Message",
                                   style:
-                                      TextStyle(fontSize: 16.0, color: cyan)),
-                              borderSide: BorderSide(color: cyan, width: 2.0),
+                                      TextStyle(fontSize: 16.0, color: MyColors.cyan)),
+                              borderSide: BorderSide(color: MyColors.cyan, width: 2.0),
                               shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(12.0)))),
@@ -83,22 +89,24 @@ class ProfileInfo extends StatelessWidget {
   Text buildProfileName(String profileName) {
     return new Text(profileName,
         style: TextStyle(
-            color: cyan, fontWeight: FontWeight.w600, fontSize: 24.0));
+            color: MyColors.cyan, fontWeight: FontWeight.w600, fontSize: 24.0));
   }
 
   Text buildProfileJob(String profileJob) {
     return new Text(profileJob + ' ',
         style: TextStyle(
-            color: cyan, fontWeight: FontWeight.w600, fontSize: 16.0));
+            color: MyColors.cyan, fontWeight: FontWeight.w600, fontSize: 16.0));
   }
 
   Text buildProfileCompany(String profileCompany) {
     return new Text(' @ ' + profileCompany,
         style: TextStyle(
-            color: deepPurple, fontWeight: FontWeight.w600, fontSize: 16.0));
+            color: MyColors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16.0));
   }
 
-  void dummy() {}
+  void dummy() {
+    widget.bloc.setProfileId.add('correia.tssc');
+  }
 }
 
 class ProfilePicture extends StatelessWidget {
